@@ -7,8 +7,10 @@ const port = 3000;
 const mongoose = require('mongoose')
 const swaggerJsdoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
+const cors = require('cors')
 
 app.use(express.json())
+app.use(cors())
 
 async function main() {
   //replaced it with the actual MongoDB database link
