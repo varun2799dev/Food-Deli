@@ -31,7 +31,7 @@ const Login = () => {
   const registerUser = async (currentUser) => {
     try {
       const response = await axios.post(
-        `https://food-deli-six.vercel.app//api/user/register`,
+        `https://food-deli-ri6z.vercel.app/api/signup`,
         currentUser
       );
       const { user, token } = response.data;
@@ -49,7 +49,7 @@ const Login = () => {
   const loginUser = async (currentUser) => {
     try {
       const response = await axios.post(
-        `https://food-deli-six.vercel.app//api/user/login`,
+        `https://food-deli-ri6z.vercel.app/api/login`,
         currentUser
       );
       const { user, token } = response.data;
