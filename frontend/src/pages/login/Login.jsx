@@ -41,8 +41,8 @@ const Login = () => {
         location.reload();
       }
     } catch (e) {
-      console.log(e);
-      setError(e.response.data);
+      console.error(e);
+      setError(e.response?.data || "Something went wrong during registration");
     }
   };
 
@@ -59,22 +59,29 @@ const Login = () => {
         location.reload();
       }
     } catch (e) {
-      console.log(e);
-      setError(e.response.data);
+      console.error(e);
+      setError(e.response?.data || "Invalid Login Credentials");
     }
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { name, email, password, cnf_password } = values;
-    console.log(name);
-    const currentUser = { name, email, password, cnf_password };
-    if (isMember) {
-      loginUser(currentUser);
-    } else {
-      registerUser(currentUser);
+  const { name, email, password, cnf_password } = values;
+
+  if (!isMember) {
+    // Registration flow: Check for password match
+    if (password !== cnf_password) {
+      setError("Passwords do not match.");
+      return;
     }
-  };
+    const currentUser = { name, email, password, cnf_password };
+    registerUser(currentUser);
+  } else {
+    // Login flow: Only send email and password
+    const currentUser = { email, password };
+    loginUser(currentUser);
+  }
+};
   return (
     <div className="contact-form">
       <h2>Login/Signup</h2>
