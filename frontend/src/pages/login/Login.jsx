@@ -32,7 +32,7 @@ const Login = () => {
     try {
       const response = await axios.post(
         `https://food-deli-ri6z.vercel.app/api/signup`,
-        currentUser
+        currentUsers
       );
       const { user, token } = response.data;
       addUserToLocalStorage({ user, token });
