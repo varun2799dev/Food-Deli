@@ -3,6 +3,7 @@ import "./Cart.css";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -10,19 +11,20 @@ const Cart = () => {
 
   //this is called on component mount
   useEffect(() => {
-    //turn it into js
+    // Retrieve cart data from localStorage
     let localCart = localStorage.getItem("cart");
 
     if (localCart) localCart = JSON.parse(localCart);
 
-    //load persisted cart into state if it exists
+    // Load persisted cart into state if it exists
     if (localCart) setCart(localCart);
-  }, []); //the empty array ensures useEffect only runs once
+  }, []); // The empty array ensures useEffect only runs once
 
   const handleRemove = () => {
     localStorage.removeItem("cart");
     location.reload();
   };
+
   if (cart.length <= 0) {
     return (
       <div className="empty-msg">
@@ -31,7 +33,7 @@ const Cart = () => {
           width="250px"
           alt=""
         />
-        <h1>Cart is Empty !</h1>
+        <h1>Cart is Empty!</h1>
         <NavLink to="/foods" className="return-shop">
           Return to Shop
         </NavLink>
@@ -39,54 +41,56 @@ const Cart = () => {
     );
   }
 
+  // Calculate the total price of items in the cart
   const totalPrice = () => {
-    let totalAmout = 0;
+    let totalAmount = 0;
     cart.forEach((item) => {
-      totalAmout += item.price * item.quantity;
+      totalAmount += item.price * item.quantity;
     });
-    return totalAmout;
+    return totalAmount;
   };
   const totalAmount = totalPrice();
 
-     const handleOrder = async () => {
-      try {
-        // Retrieve userId and username from localStorage
-        const user = localStorage.getItem("user");
-        if (!user) {
-          alert("You need to log in before placing an order!");
-          return navigate("/login"); // Redirect to login page if user is not logged in
-        }
-    
-        const parsedUser = JSON.parse(user); // Parse user object from localStorage
-        const { _id: userId, name: username } = parsedUser;
-    
-        // The cart is already in state, no need to fetch it again
-        const orderedItems = cart;
-    
-        // Calculate the totalAmount (already done earlier in totalPrice())
-        const totalAmount = totalPrice();
-    
-        // Prepare the payload
-        const payload = {
-          userId,
-          username,
-          orderedItems,
-          totalAmount,
-        };
-    
-        // Send the data to the backend
-        const response = await axios.post("https://food-deli-ri6z.vercel.app/api/create-order", payload);
-    
-        if (response.status === 200) {
-          alert("Order placed successfully!");
-          localStorage.removeItem("cart"); // Clear the cart after successful order
-          navigate("/checkout"); // Redirect to foods or any other page
-        }
-      } catch (error) {
-        console.error("Failed to place order:", error);
-        alert("Something went wrong while placing the order.");
+  // Handle the order submission
+  const handleOrder = async () => {
+    try {
+      // Retrieve the user data (userId and username) from localStorage
+      const user = localStorage.getItem("user");
+      if (!user) {
+        alert("You need to log in before placing an order!");
+        return navigate("/login"); // Redirect to login page if user is not logged in
       }
-    };
+
+      const parsedUser = JSON.parse(user); // Parse user object from localStorage
+      const { _id: userId, name: username } = parsedUser;
+
+      // The cart is already in the state, no need to fetch it again
+      const orderedItems = cart;
+
+      // Prepare the payload to send to the backend
+      const payload = {
+        userId,  // User ID from localStorage
+        username,  // Username from localStorage
+        orderedItems,  // Array of ordered items from the cart
+        totalAmount,  // Total amount calculated in the frontend
+      };
+
+      // Send the data to the backend
+      const response = await axios.post(
+        "https://food-deli-ri6z.vercel.app/api/create-order",
+        payload
+      );
+
+      if (response.status === 200) {
+        alert("Order placed successfully!");
+        localStorage.removeItem("cart"); // Clear the cart after successful order
+        navigate("/checkout"); // Redirect to checkout page
+      }
+    } catch (error) {
+      console.error("Failed to place order:", error);
+      alert("Something went wrong while placing the order.");
+    }
+  };
 
   return (
     <div className="cart-food-list">
@@ -105,23 +109,23 @@ const Cart = () => {
           );
         })}
       </div>
-      {
-        <div className="subtotal">
-          <h2>Subtotal</h2>
-          <div className="subtotao-details">
-            <p>Total Price : Rs. {totalAmount}</p>
-            <hr />
-            <p>Final Price : Rs. {totalAmount}</p>
-          </div>
-          <button className="check-btn" onClick ={handleOrder}>Order Now</button>
-          <button onClick={() => navigate("/foods")} className="return-btn">
-            Return to shop
-          </button>
-          <p onClick={() => handleRemove()} className="delete-icon">
-            Empty Cart: <DeleteForeverIcon />
-          </p>
+      <div className="subtotal">
+        <h2>Subtotal</h2>
+        <div className="subtotao-details">
+          <p>Total Price : Rs. {totalAmount}</p>
+          <hr />
+          <p>Final Price : Rs. {totalAmount}</p>
         </div>
-      }
+        <button className="check-btn" onClick={handleOrder}>
+          Order Now
+        </button>
+        <button onClick={() => navigate("/foods")} className="return-btn">
+          Return to shop
+        </button>
+        <p onClick={() => handleRemove()} className="delete-icon">
+          Empty Cart: <DeleteForeverIcon />
+        </p>
+      </div>
     </div>
   );
 };
