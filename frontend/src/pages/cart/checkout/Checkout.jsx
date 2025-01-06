@@ -2,7 +2,7 @@
 const Checkout = () => {
     return (
         <div>
-            <h3>Checkout page</h3>
+            <h3>Your Order was successfully placed!!</h3>
         </div>
     )
 }

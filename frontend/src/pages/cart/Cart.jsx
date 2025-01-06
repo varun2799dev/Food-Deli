@@ -33,7 +33,7 @@ const Cart = () => {
         />
         <h1>Cart is Empty !</h1>
         <NavLink to="/foods" className="return-shop">
-          return to shop
+          Return to Shop
         </NavLink>
       </div>
     );
@@ -47,6 +47,46 @@ const Cart = () => {
     return totalAmout;
   };
   const totalAmount = totalPrice();
+
+     const handleOrder = async () => {
+      try {
+        // Retrieve userId and username from localStorage
+        const user = localStorage.getItem("user");
+        if (!user) {
+          alert("You need to log in before placing an order!");
+          return navigate("/login"); // Redirect to login page if user is not logged in
+        }
+    
+        const parsedUser = JSON.parse(user); // Parse user object from localStorage
+        const { _id: userId, name: username } = parsedUser;
+    
+        // The cart is already in state, no need to fetch it again
+        const orderedItems = cart;
+    
+        // Calculate the totalAmount (already done earlier in totalPrice())
+        const totalAmount = totalPrice();
+    
+        // Prepare the payload
+        const payload = {
+          userId,
+          username,
+          orderedItems,
+          totalAmount,
+        };
+    
+        // Send the data to the backend
+        const response = await axios.post("https://food-deli-ri6z.vercel.app/api/create-order", payload);
+    
+        if (response.status === 200) {
+          alert("Order placed successfully!");
+          localStorage.removeItem("cart"); // Clear the cart after successful order
+          navigate("/checkout"); // Redirect to foods or any other page
+        }
+      } catch (error) {
+        console.error("Failed to place order:", error);
+        alert("Something went wrong while placing the order.");
+      }
+    };
 
   return (
     <div className="cart-food-list">
@@ -73,7 +113,7 @@ const Cart = () => {
             <hr />
             <p>Final Price : Rs. {totalAmount}</p>
           </div>
-          <button className="check-btn">Order Now</button>
+          <button className="check-btn" onClick ={handleOrder}>Order Now</button>
           <button onClick={() => navigate("/foods")} className="return-btn">
             Return to shop
           </button>
