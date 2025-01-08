@@ -5,7 +5,7 @@ const createOrder = async (req, res) => {
     const { orderedItems, userId, username, totalAmount } = req.body;
 
     // Check if orderedItems is empty
-    if (orderedItems.length === 0) {
+    if (!orderedItems || !Array.isArray(orderedItems) || orderedItems.length === 0) {
       return res.status(400).send('Your cart is empty');
     }
 
