@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer>
       <div className="footer-nav">
-        <h2>Importans links</h2>
+        <h2>Important links</h2>
         <NavLink to="/" className="footer-navlink">
           Home
         </NavLink>
