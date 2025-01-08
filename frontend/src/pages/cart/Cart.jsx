@@ -71,7 +71,7 @@ const Cart = () => {
       const payload = {
         userId,  // User ID from localStorage
         username,  // Username from localStorage
-        orderedItems,  // Array of ordered items from the cart
+        items: orderedItems,  // Array of ordered items from the cart
         totalAmount,  // Total amount calculated in the frontend
       };
 
