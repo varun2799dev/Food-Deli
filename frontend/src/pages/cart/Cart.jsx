@@ -72,7 +72,7 @@ const Cart = () => {
         userId,  // User ID from localStorage
         username,  // Username from localStorage
         orderedItems,  // Array of ordered items from the cart
-        totalAmount,  // Total amount calculated in the frontend
+        totalAmount  // Total amount calculated in the frontend
       };
 
       // Send the data to the backend
