@@ -65,7 +65,13 @@ const Cart = () => {
       const { _id: userId, name: username } = parsedUser;
 
       // The cart is already in the state, no need to fetch it again
-      const orderedItems = cart;
+      const orderedItems = cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity
+      }));
+      
 
       // Prepare the payload to send to the backend
       const payload = {
