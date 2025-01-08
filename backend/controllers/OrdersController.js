@@ -2,7 +2,9 @@ const OrdersModel = require('../models/Orders')
 
 const createOrder = async (req, res) => {
   try {
+    console.log(req.body)
     const { orderedItems, userId, username, totalAmount } = req.body;
+
 
     // Check if orderedItems is empty
     if (!orderedItems || !Array.isArray(orderedItems) || orderedItems.length === 0) {
