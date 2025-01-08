@@ -11,6 +11,7 @@ const OrdersModel = mongoose.model('Order',{
         quantity: { type: Number, required: true }, // Quantity of the item
       }
     ],
+    totalAmount: { type: Number, required: true },
 },{timestamps : true});
 
 module.exports = OrdersModel;

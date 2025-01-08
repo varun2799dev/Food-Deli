@@ -1,7 +1,7 @@
 const express = require('express')
 const dishes = require('../backend/routes/dishesRoutes')
 const user = require('../backend/routes/userRoutes')
-const createOrder = require('./routes/OrderRoutes')
+const orderRoutes = require('./routes/OrderRoutes')
 const app = express()
 const port = 3000;
 const mongoose = require('mongoose')
@@ -24,7 +24,7 @@ main().catch(err => console.log(err));
 
 app.use('/api',user)
 app.use('/api',dishes)
-app.use('/api',createOrder)
+app.use('/api',orderRoutes)
 
 
 
