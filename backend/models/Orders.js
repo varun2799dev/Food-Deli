@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const OrdersModel = mongoose.model('Order',{
     userId: { type: String, required: true }, // User ID directly from localStorage
-    userName: { type: String, required: true }, // Username of the user
+    username: { type: String, required: true }, // Username of the user
     items: [
       {
         id: { type: Number, required: true }, // Unique item identifier
